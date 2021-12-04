@@ -1,4 +1,5 @@
-﻿using EDProject1.Models;
+﻿using EDProject1.Algorithm;
+using EDProject1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,27 +12,22 @@ namespace EDProject1.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly DataStructure _dataStructure;
+        public HomeController(DataStructure dataStructure)
         {
-            _logger = logger;
+            _dataStructure = dataStructure;
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
+           
+            DataTableVm dataTableVm = new DataTableVm
+            {
+                ColumnNames = _dataStructure.GetColumnNames(),
+                Rows = _dataStructure.GetRowsRaw()
+            };
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(dataTableVm);
         }
     }
 }

@@ -1,0 +1,8 @@
+﻿@model List<string>
+
+<select id="@ViewBag.DropdownId" name="@ViewBag.DropdownId">
+    @foreach (var columnName in Model)
+    {
+        <option value="@columnName">@columnName</option>
+    }
+</select>

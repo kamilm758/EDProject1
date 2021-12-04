@@ -1,3 +1,6 @@
+using EDProject1.Models;
+using EDProject1.Services;
+using EDProject1.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -24,6 +27,8 @@ namespace EDProject1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddSingleton<DataStructure>();
+            services.AddTransient<IImportService, ImportService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

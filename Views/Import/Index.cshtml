@@ -1,0 +1,14 @@
+﻿
+@model UploadFileModel
+
+
+
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="file" asp-for=@Model.File />
+        <p>Czy dane mają nagłówek?</p>
+        <input type="checkbox" asp-for=@Model.IsHeader />
+        </br>
+        <input type="submit" />
+    </div>
+</form>

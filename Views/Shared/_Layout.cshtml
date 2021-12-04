@@ -1,17 +1,22 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/js/bootstrap-colorpicker.min.js" integrity="sha512-94dgCw8xWrVcgkmOc2fwKjO4dqy/X3q7IjFru6MHJKeaAzCvhkVtOS6S+co+RbcZvvPBngLzuVMApmxkuWZGwQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - EDProject1</title>
+    <title>@ViewData["Title"] - SystemyWspomaganiaDecyzjiProjekt</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">EDProject1</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SystemyWspomaganiaDecyzjiProjekt</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -22,7 +27,52 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Import" asp-action="Index">Import file</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Operacje na kolumnach
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <button class="dropdown-item" data-toggle="modal" data-target="#textToNumbersModal">Tekst na liczby</button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#columnDiscretisationModal">Dyskretyzacja zmiennych</button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#columnNormalizationModal">Normalizacja zmiennych rzeczywistych </button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#changeVariableRangeModal">Zmiana przedziału wartości</button>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Pozyskiwanie danych
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <button class="dropdown-item" data-toggle="modal" data-target="#percentMinMaxValuesModal">% najmniejszych/największych wartości</button>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Wizualizacje
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <button class="dropdown-item" data-toggle="modal" data-target="#chart2DModal">Wykres 2D </button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#chart3DModal">Wykres 3D </button>
+                                <button class="dropdown-item" data-toggle="modal" data-target="#histogramModal">Histogram </button>
+                                <div class="dropdown-divider"></div>
+
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Klasyfikatory
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <button class="dropdown-item" data-toggle="modal" data-target="#methodKNNModal">Metoda k-nn </button>
+                                <div class="dropdown-divider"></div>
+
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -37,12 +87,210 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2021 - EDProject1 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - SystemyWspomaganiaDecyzjiProjekt - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+
+    <!-- textToNumbersModal -->
+    <div class="modal fade" id="textToNumbersModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="DataOperation" asp-action="ChangeTextToNumbers" method="get">
+                    <div class="modal-body">
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "textToNumberDropdown", columnTypes = new List<ColumnType> { ColumnType.STRING } })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- columnDiscretisationModal -->
+    <div class="modal fade" id="columnDiscretisationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="DataOperation" asp-action="DiscretizeVariable" method="get">
+                    <div class="modal-body">
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "columnDiscretisationDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        <input type="number" name="countOfIntervals" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- columnNormalizationModal -->
+    <div class="modal fade" id="columnNormalizationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="DataOperation" asp-action="NormalizeVariable" method="post">
+                    <div class="modal-body">
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "normalizationDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- columnNormalizationModal -->
+    <div class="modal fade" id="changeVariableRangeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="DataOperation" asp-action="ChangeVariableRange" method="post">
+                    <div class="modal-body">
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "changeVariableRangeDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        <input type="text" name="min" />
+                        <input type="text" name="max" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- percentMinMaxValuesModal -->
+    <div class="modal fade" id="percentMinMaxValuesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="DataMining" asp-action="GetPercentMinMaxValues" method="post">
+                    <div class="modal-body">
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "percentMinMaxValuesDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        <select name="loadType">
+                            <option value="MIN">Min</option>
+                            <option value="MAX">Max</option>
+                        </select>
+
+                        <input type="text" name="percent" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="chart2DModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="Visualization" asp-action="Show2DChart" method="get">
+                    <div class="modal-body">
+                        X @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "xAxisDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        Y @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "yAxisDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        Klasa @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "classDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL, ColumnType.STRING } })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="chart3DModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="Visualization" asp-action="Show3DChart" method="get">
+                    <div class="modal-body">
+                        X  @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "xAxisDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        Y  @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "yAxisDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        Z  @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "zAxisDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL } })
+                        Klasa @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "classDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL, ColumnType.STRING } })
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="histogramModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="Visualization" asp-action="ShowHistogram" method="post">
+                    <div class="modal-body">
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "columnNameDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL, ColumnType.STRING } })
+                        <input type="number" name="intervalCount" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
