@@ -14,13 +14,17 @@
 </head>
 <body>
     <header>
+      
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SystemyWspomaganiaDecyzjiProjekt</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Eksploracja danych</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                <buttpn>
+                    <a asp-action="NextStep" asp-controller="Home">Next Step</a>
+                </buttpn>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
@@ -29,19 +33,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Import" asp-action="Index">Import file</a>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Operacje na kolumnach
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <button class="dropdown-item" data-toggle="modal" data-target="#textToNumbersModal">Tekst na liczby</button>
-                                <button class="dropdown-item" data-toggle="modal" data-target="#columnDiscretisationModal">Dyskretyzacja zmiennych</button>
-                                <button class="dropdown-item" data-toggle="modal" data-target="#columnNormalizationModal">Normalizacja zmiennych rzeczywistych </button>
-                                <button class="dropdown-item" data-toggle="modal" data-target="#changeVariableRangeModal">Zmiana przedziału wartości</button>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Pozyskiwanie danych

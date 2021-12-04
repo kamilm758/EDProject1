@@ -13,9 +13,11 @@ namespace EDProject1.Controllers
     public class HomeController : Controller
     {
         private readonly DataStructure _dataStructure;
-        public HomeController(DataStructure dataStructure)
+        private readonly AlgorithmProcessor _algorithmProcessor;
+        public HomeController(DataStructure dataStructure, AlgorithmProcessor algorithmProcessor)
         {
             _dataStructure = dataStructure;
+            _algorithmProcessor = algorithmProcessor;
         }
 
         public IActionResult Index()
@@ -28,6 +30,13 @@ namespace EDProject1.Controllers
             };
 
             return View(dataTableVm);
+        }
+
+        public IActionResult NextStep()
+        {
+            _algorithmProcessor.RunOneStep();
+
+            return RedirectToAction("Index");
         }
     }
 }

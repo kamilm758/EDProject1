@@ -3,11 +3,7 @@ using EDProject1.Extensions;
 using EDProject1.Models;
 using EDProject1.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EDProject1.Controllers
 {
@@ -36,9 +32,6 @@ namespace EDProject1.Controllers
                 _dataStructure.InitializeColumnTypes(dataTable.GetColumnNames());
                 _dataStructure.ImportData(dataTable);
             }
-            AlgorithmProcessor algorithmProcessor = new AlgorithmProcessor(_dataStructure);
-
-            algorithmProcessor.Run();
             return RedirectToAction("Index", "Home");
         }
     }

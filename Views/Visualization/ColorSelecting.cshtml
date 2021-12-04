@@ -1,0 +1,38 @@
+﻿@model EDProject1.Models.Chart2DVm
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/3.4.0/css/bootstrap-colorpicker.css" integrity="sha512-HcfKB3Y0Dvf+k1XOwAD6d0LXRFpCnwsapllBQIvvLtO2KMTa0nI5MtuTv3DuawpsiA0ztTeu690DnMux/SuXJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<form asp-action="Show2DChart" method="post">
+    <input hidden asp-for="@Model.XColumnName" />
+    <input hidden asp-for="@Model.YColumnName" />
+    <input hidden asp-for="@Model.ClassName" />
+
+    @for (int i = 0; i < Model.ClassColorMapping.Count; i++)
+    {
+        <label>@Model.ClassColorMapping.Keys.ToList()[i]</label>
+        {
+            var index = $"cp{i}";
+            <div id="@index"  class="input-group" data-color="rgb(241, 138, 49)"
+                 title="Using data-color attribute in the colorpicker element">
+                <input type="text" class="form-control input-lg"  asp-for="@Model.ClassColorMapping[Model.ClassColorMapping.Keys.ToList()[i]]"  />
+                <span class="input-group-append">
+                    <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                </span>
+            </div>
+        }
+    }
+    <input type="submit" />
+
+</form>
+
+
+<script>
+$(function () {
+    @for (int i = 0; i <Model.ClassColorMapping.Count; i++)
+    {
+            <text>$('#cp' + @i).colorpicker();</text>
+    }
+});
+</script>
+
+
+

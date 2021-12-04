@@ -1,0 +1,62 @@
+﻿@model EDProject1.Models.Chart2DVm
+
+<canvas id="myChart" width="400" height="400"></canvas>
+
+<script>
+    const data = {
+        datasets: [@foreach (var item in Model.ClassColorMapping)
+        {
+            <text>
+            {
+                label: '@item.Key',
+                data: [
+                    @foreach (var point2D in Model.ClassPoints.Where(x=>x.Class == item.Key))
+                    {
+                        <text>
+                        {
+                            x: @point2D.X.ToString("0.00").Replace(',','.'),
+                            y: @point2D.Y.ToString("0.00").Replace(',', '.')
+                        },
+                        </text>
+                    }
+                ],
+                backgroundColor: '@item.Value'
+            },
+            </text>
+        }
+        ],
+    };
+
+
+
+    const config = {
+        type: 'scatter',
+        data: data,
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom',
+                    title: {
+                        display: true,
+                        text: '@Model.XColumnName.'
+                    }
+                },
+                 y: {
+                    type: 'linear',
+                    title: {
+                        display: true,
+                        text: '@Model.YColumnName.'
+                    }
+                },
+            }
+        }
+    };
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, config);
+
+
+
+</script>
+

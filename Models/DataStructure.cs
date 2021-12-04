@@ -142,6 +142,20 @@ namespace EDProject1.Models
             throw new Exception($"Column {columnName} not exists in data structure.");
         }
 
+        public void OrderByColumn(string columnName)
+        {
+            rows = rows.OrderBy(x=>Double.Parse(x.GetValue(columnName))).ToList();
+        }
+
+        public void RemoveFirstRows(int number)
+        {
+            rows = rows.Skip(number).ToList();
+        }
+
+        public void RemoveLastRows(int number)
+        {
+            rows = rows.Take(rows.Count - number).ToList();
+        }
 
         private void UpdateColumnType(string columnName, string value)
         {

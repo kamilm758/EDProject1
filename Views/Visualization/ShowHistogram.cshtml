@@ -1,0 +1,40 @@
+﻿@model SortedDictionary<string, int>
+
+<canvas id="myChart" width="400" height="400"></canvas>
+
+<script>
+    const labels = [@foreach (var item in Model)
+    {
+        <text>"@item.Key",</text>
+    }]
+    const data = {
+        labels: labels,
+        datasets: [{
+            label: 'My First Dataset',
+            data: [@foreach (var item in Model) { <text>@item.Value,</text>}],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)'
+            ],
+            borderColor: [
+                'rgb(255, 99, 132)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const config = {
+        type: 'bar',
+        data: data,
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        },
+    };
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, config);
+
+</script>

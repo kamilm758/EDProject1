@@ -19,7 +19,7 @@ namespace EDProject1.Algorithm
         public void RzutujNaProsta()
         {
             List<string> columnNames = _dataStructure.GetColumnNames();
-
+            _rzutowanieNaProsta.Clear();
             foreach (var columnName in columnNames.SkipLast(1))
             {
                 _rzutowanieNaProsta.Add(columnName, new RzutownieNaProsta());
@@ -40,16 +40,33 @@ namespace EDProject1.Algorithm
           
         }
 
-        public void Run()
+        public void RunOneStep()
         {
             RzutujNaProsta();
 
-                var nextCut = NextCut();
+            var nextCut = NextCut();
+            _dataStructure.OrderByColumn(nextCut.Item1);
+            if (nextCut.Item3)
+                _dataStructure.RemoveFirstRows(nextCut.Item2);
+            else
+                _dataStructure.RemoveLastRows(nextCut.Item2);
+        }
+
+        public void Run()
+        {
+           
+            while(_dataStructure.GetRowsRaw().Any())
+            {
+                RunOneStep();
+            }
+             
+
         }
 
         private (string, int, bool) NextCut()
         {
             List<(string, int, bool)> prepareToCut = new();   
+
 
             foreach (var value in _rzutowanieNaProsta)
             {
@@ -58,7 +75,9 @@ namespace EDProject1.Algorithm
                 (string, int, bool) toAdd = ((value.Key, 0, true));
                 foreach (var item in _rzutowanieNaProsta[value.Key].Wymiar)
                 {
-                    if (item.Item2 == firstValue.Item2)
+                    List<(double, string)> podzbiorZTaSamoWartoscia = _rzutowanieNaProsta[value.Key].Wymiar.Where(x => x.Item1 == item.Item1).ToList();
+
+                    if (podzbiorZTaSamoWartoscia.All(x=>x.Item2 == firstValue.Item2))
                         toAdd.Item2++;
                     else break;
                 }
@@ -68,7 +87,9 @@ namespace EDProject1.Algorithm
                 var lastValue = _rzutowanieNaProsta[value.Key].Wymiar.Last();
                 foreach (var item in _rzutowanieNaProsta[value.Key].Wymiar.AsEnumerable().Reverse())
                 {
-                    if (item.Item2 == lastValue.Item2)
+                    List<(double, string)> podzbiorZTaSamoWartoscia = _rzutowanieNaProsta[value.Key].Wymiar.Where(x => x.Item1 == item.Item1).ToList();
+
+                    if (podzbiorZTaSamoWartoscia.All(x => x.Item2 == lastValue.Item2))
                         toAdd.Item2++;
                     else break;
                 }

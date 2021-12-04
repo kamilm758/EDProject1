@@ -1,3 +1,4 @@
+using EDProject1.Algorithm;
 using EDProject1.Models;
 using EDProject1.Services;
 using EDProject1.Services.Interfaces;
@@ -29,6 +30,8 @@ namespace EDProject1
             services.AddControllersWithViews();
             services.AddSingleton<DataStructure>();
             services.AddTransient<IImportService, ImportService>();
+            services.AddTransient<AlgorithmProcessor>();
+            services.AddTransient<IDataAnalizerService, DataAnalizerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
