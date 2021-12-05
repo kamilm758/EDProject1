@@ -27,5 +27,10 @@ namespace EDProject1.Models
         {
             return _cells.Values.ToList();
         }
+
+        public Dictionary<string, string> GetRawDataWithHeaders()
+        {
+            return _cells;
+        }
     }
 }

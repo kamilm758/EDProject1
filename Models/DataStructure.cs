@@ -1,4 +1,5 @@
-﻿using EDProject1.Enums;
+﻿using EDProject1.Algorithm;
+using EDProject1.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -144,12 +145,29 @@ namespace EDProject1.Models
 
         public void OrderByColumn(string columnName)
         {
-            rows = rows.OrderBy(x=>Double.Parse(x.GetValue(columnName))).ToList();
+            rows = rows.OrderBy(x=>Double.Parse(x.GetValue(columnName).Replace('.',','))).ToList();
         }
 
         public void RemoveFirstRows(int number)
         {
             rows = rows.Skip(number).ToList();
+        }
+
+        public void RemoveFirstWithClass(string className, string orderColumn, int number)
+        {
+            OrderByColumn(orderColumn);
+            var rowsToRemove = rows.Where(x => x.GetRawData().Last() == className).Take(number).ToList();
+            AlgorithmProcessor._usunietePunkty.AddRange(rowsToRemove.Select(x=>x.GetRawDataWithHeaders()));
+            rows = rows.Where(x => !rowsToRemove.Contains(x)).ToList();
+           
+        }
+
+        public void RemoveLastWithClass(string className, string orderColumn, int number)
+        {
+            OrderByColumn(orderColumn);
+            var rowsToRemove = rows.Where(x => x.GetRawData().Last() == className).TakeLast(number).ToList();
+            AlgorithmProcessor._usunietePunkty.AddRange(rowsToRemove.Select(x => x.GetRawDataWithHeaders()));
+            rows = rows.Where(x => !rowsToRemove.Contains(x)).ToList();
         }
 
         public void RemoveLastRows(int number)
