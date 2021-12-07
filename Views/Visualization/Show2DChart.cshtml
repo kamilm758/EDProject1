@@ -24,6 +24,36 @@
             },
             </text>
         }
+    @for(int i = 0; i < Model.Proste.Count; i++)
+    {
+        int numerCiecie = i + 1;
+        bool poziomeCiecie = Model.Proste[i].NazwaZmiennej == Model.XColumnName;
+        decimal x1 = poziomeCiecie ? (decimal)Model.Proste[i].WartoscCiecia : Model.Xmin;
+        decimal x2 = poziomeCiecie ? (decimal)Model.Proste[i].WartoscCiecia : Model.Xmax;
+        decimal y1 = poziomeCiecie ? Model.Ymin : (decimal)Model.Proste[i].WartoscCiecia;
+        decimal y2 = poziomeCiecie ? Model.YMax : (decimal)Model.Proste[i].WartoscCiecia;
+        <text>
+            {
+            data: [{
+            x: @x1.ToString("0.00").Replace(',','.'),
+            y: @y1.ToString("0.00").Replace(',','.')
+         }, {
+            x: @x2.ToString("0.00").Replace(',','.'),
+            y: @y2.ToString("0.00").Replace(',','.')
+         }],
+         label: "@numerCiecie cięcie",
+         borderColor: 'black',
+         borderWidth: 1,
+         pointBackgroundColor: ['#000', '#00bcd6', '#d300d6'],
+         pointBorderColor: ['#000', '#00bcd6', '#d300d6'],
+         pointRadius: 5,
+         pointHoverRadius: 5,
+         fill: false,
+         tension: 0,
+         showLine: true
+        },
+        </text>   
+    }
         ],
     };
 

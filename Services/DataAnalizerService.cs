@@ -33,11 +33,11 @@ namespace EDProject1.Services
 
         public List<Point2D> GetDataForChart2D(string xName, string yName, string className)
         {
-            var rowsRawWithHeders = _dataStructure.GetRowsRawWithHeaders();
-            List<Point2D> result = new List<Point2D>();
+            var rowsRawWithHeders = _dataStructure.GetOriginalRowsRawWithHeaders();
+            List<Point2D> result = new();
             foreach (var row in rowsRawWithHeders)
             {
-                Point2D point2D = new Point2D
+                Point2D point2D = new()
                 {
                     X = decimal.Parse(row[xName]),
                     Y = decimal.Parse(row[yName]),

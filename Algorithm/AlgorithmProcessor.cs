@@ -57,6 +57,8 @@ namespace EDProject1.Algorithm
 
         public void RunOneStep()
         {
+            if (_dataStructure.GetRowsRaw().Count == 0) return;
+
             RzutujNaProsta();
 
             var nextCut = NextCut();

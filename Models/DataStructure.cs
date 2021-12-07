@@ -9,8 +9,9 @@ namespace EDProject1.Models
 {
     public class DataStructure
     {
-        private Dictionary<string, ColumnType> _columnTypes = new Dictionary<string, ColumnType>();
-        private List<DataRow> rows = new List<DataRow>();
+        private readonly Dictionary<string, ColumnType> _columnTypes = new Dictionary<string, ColumnType>();
+        private List<DataRow> _rows = new();
+        private readonly List<DataRow> _rowsOriginal = new();
 
         public void InitializeColumnTypes(IEnumerable<string> columnNames)
         {
@@ -41,6 +42,39 @@ namespace EDProject1.Models
             return result;
         }
 
+        public List<Dictionary<string, string>> GetOriginalRowsRawWithHeaders()
+        {
+            List<Dictionary<string, string>> result = new List<Dictionary<string, string>>();
+
+            List<List<string>> rowsRaw = GetOriginalRowsRaw();
+
+            List<string> columnNames = GetColumnNames();
+            foreach (var row in rowsRaw)
+            {
+                Dictionary<string, string> rowRaw = new Dictionary<string, string>();
+                for (int i = 0; i < columnNames.Count; i++)
+                {
+                    rowRaw.Add(columnNames[i], row[i]);
+                }
+
+                result.Add(rowRaw);
+            }
+
+            return result;
+        }
+
+        public List<List<string>> GetOriginalRowsRaw()
+        {
+            List<List<string>> result = new List<List<string>>();
+
+            foreach (DataRow row in _rowsOriginal)
+            {
+                result.Add(row.GetRawData());
+            }
+
+            return result;
+        }
+
         public List<string> GetColumnNames(params ColumnType[] columnTypes)
         {
             var result = _columnTypes.Keys.ToList();
@@ -53,7 +87,7 @@ namespace EDProject1.Models
         {
             List<List<string>> result = new List<List<string>>();
 
-            foreach (DataRow row in rows)
+            foreach (DataRow row in _rows)
             {
                 result.Add(row.GetRawData());
             }
@@ -68,14 +102,19 @@ namespace EDProject1.Models
 
             List<string> toReturn = new List<string>();
             if (_columnTypes.ContainsKey(columnName))
-                toReturn = rows.Select(s => s.GetValue(columnName)).ToList();
+                toReturn = _rows.Select(s => s.GetValue(columnName)).ToList();
 
             return toReturn;
         }
 
         public IEnumerable<object> GetValuesDistinct(string columnName)
         {
-            return rows.Select(x => x.GetValue(columnName)).Distinct();
+            return _rows.Select(x => x.GetValue(columnName)).Distinct();
+        }
+
+        public IEnumerable<object> GetOriginalValuesDistinct(string columnName)
+        {
+            return _rowsOriginal.Select(x => x.GetValue(columnName)).Distinct();
         }
 
         public void ImportData(DataTable dataTable)
@@ -112,7 +151,8 @@ namespace EDProject1.Models
                 }
             }
 
-            rows.Add(new DataRow(cells));
+            _rows.Add(new DataRow(cells));
+            _rowsOriginal.Add(new DataRow(cells));
         }
 
         public void AddColumn(string columnName, List<string> values)
@@ -121,10 +161,10 @@ namespace EDProject1.Models
             {
                 _columnTypes.Add(columnName, ColumnType.INT);
 
-                for (int i = 0; i < rows.Count; i++)
+                for (int i = 0; i < _rows.Count; i++)
                 {
                     string cellValue = values.ElementAtOrDefault(i) ?? string.Empty;
-                    rows[i].AddCell(columnName, cellValue);
+                    _rows[i].AddCell(columnName, cellValue);
                     UpdateColumnType(columnName, cellValue);
                 }
             }
@@ -132,7 +172,7 @@ namespace EDProject1.Models
 
         public object GetValue(int rowNumber, string columnName)
         {
-            return rows.ElementAtOrDefault(rowNumber)?.GetValue(columnName);
+            return _rows.ElementAtOrDefault(rowNumber)?.GetValue(columnName);
         }
 
         public ColumnType GetColumnType(string columnName)
@@ -145,34 +185,34 @@ namespace EDProject1.Models
 
         public void OrderByColumn(string columnName)
         {
-            rows = rows.OrderBy(x=>Double.Parse(x.GetValue(columnName).Replace('.',','))).ToList();
+            _rows = _rows.OrderBy(x=>Double.Parse(x.GetValue(columnName).Replace('.',','))).ToList();
         }
 
         public void RemoveFirstRows(int number)
         {
-            rows = rows.Skip(number).ToList();
+            _rows = _rows.Skip(number).ToList();
         }
 
         public void RemoveFirstWithClass(string className, string orderColumn, int number)
         {
             OrderByColumn(orderColumn);
-            var rowsToRemove = rows.Where(x => x.GetRawData().Last() == className).Take(number).ToList();
+            var rowsToRemove = _rows.Where(x => x.GetRawData().Last() == className).Take(number).ToList();
             AlgorithmProcessor._usunietePunkty.AddRange(rowsToRemove.Select(x=>x.GetRawDataWithHeaders()));
-            rows = rows.Where(x => !rowsToRemove.Contains(x)).ToList();
+            _rows = _rows.Where(x => !rowsToRemove.Contains(x)).ToList();
            
         }
 
         public void RemoveLastWithClass(string className, string orderColumn, int number)
         {
             OrderByColumn(orderColumn);
-            var rowsToRemove = rows.Where(x => x.GetRawData().Last() == className).TakeLast(number).ToList();
+            var rowsToRemove = _rows.Where(x => x.GetRawData().Last() == className).TakeLast(number).ToList();
             AlgorithmProcessor._usunietePunkty.AddRange(rowsToRemove.Select(x => x.GetRawDataWithHeaders()));
-            rows = rows.Where(x => !rowsToRemove.Contains(x)).ToList();
+            _rows = _rows.Where(x => !rowsToRemove.Contains(x)).ToList();
         }
 
         public void RemoveLastRows(int number)
         {
-            rows = rows.Take(rows.Count - number).ToList();
+            _rows = _rows.Take(_rows.Count - number).ToList();
         }
 
         private void UpdateColumnType(string columnName, string value)
