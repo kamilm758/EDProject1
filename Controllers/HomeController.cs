@@ -5,7 +5,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EDProject1.Controllers
@@ -37,6 +39,16 @@ namespace EDProject1.Controllers
             _algorithmProcessor.RunOneStep();
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult GetVectors()
+        {
+            _algorithmProcessor.CreateBinaryVectors();
+
+
+            string vectors = string.Join('\n', AlgorithmProcessor.Vectors.Select(x =>string.Join(',', x.Select(y => y.ToString().Replace("True","1").Replace("False", "0")))).Distinct());
+
+            return File(Encoding.UTF8.GetBytes(vectors), "text/plain", "Vectors.txt");
         }
     }
 }

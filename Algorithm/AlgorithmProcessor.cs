@@ -11,6 +11,8 @@ namespace EDProject1.Algorithm
         private readonly Dictionary<string, RzutownieNaProsta> _rzutowanieNaProsta;
         public static List<Prosta> _proste = new();
         public static List<Dictionary<string, string>> _usunietePunkty = new();
+        public static List<List<bool>> Vectors = new();
+
         public AlgorithmProcessor(DataStructure dataStructure)
         {
             _dataStructure = dataStructure;
@@ -99,8 +101,6 @@ namespace EDProject1.Algorithm
             {
                 RunOneStep();
             }
-             
-
         }
 
         private void RemoveSomeRows()
@@ -150,8 +150,6 @@ namespace EDProject1.Algorithm
                 var lowestCountClassLast = classCountLast.OrderBy(x => x.Value).First();
                 if (lowestCountClassLast.Value < kierunekUsunieciaPunktow.Item3)
                     kierunekUsunieciaPunktow = (columnName, lowestCountClassLast.Key, lowestCountClassLast.Value, false);
-
-
             }
 
 
@@ -197,6 +195,29 @@ namespace EDProject1.Algorithm
 
             return prepareToCut.OrderBy(x=>x.Item2).Last();
 
+        }
+
+        public void CreateBinaryVectors()
+        {
+            List<Dictionary<string, string>> rowsRaw = _dataStructure.GetOriginalRowsRawWithHeaders();
+
+            foreach (var row in rowsRaw)
+            {
+                List<bool> binaryVector = new();
+                foreach (var prosta in _proste)
+                {
+                    double rowValue = double.Parse(row[prosta.NazwaZmiennej].Replace('.', ','));
+                    if (prosta.Kierunek && rowValue <= prosta.WartoscCiecia)
+                        binaryVector.Add(true);
+                    else if (!prosta.Kierunek && rowValue > prosta.WartoscCiecia)
+                        binaryVector.Add(true);
+                    else
+                        binaryVector.Add(false);
+
+
+                }
+                Vectors.Add(binaryVector);
+            }
         }
     }
 }
