@@ -14,7 +14,7 @@
 </head>
 <body>
     <header>
-      
+
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Eksploracja danych</a>
@@ -24,6 +24,9 @@
                 </button>
                 <buttpn>
                     <a asp-action="NextStep" asp-controller="Home">Next Step</a>
+                </buttpn>
+                <buttpn style="padding-left:10px">
+                    <a asp-action="AllStep" asp-controller="Home" >All Step</a>
                 </buttpn>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
@@ -274,6 +277,29 @@
                     <div class="modal-body">
                         @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "columnNameDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.DECIMAL, ColumnType.STRING } })
                         <input type="number" name="intervalCount" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+                        <button type="submit" class="btn btn-primary">Wybierz</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal fade" id="methodKNNModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Wybierz kolumnę</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form asp-controller="Classification" asp-action="ClassificationMode" method="get">
+                    <div class="modal-body">
+
+                        @await Component.InvokeAsync(nameof(ColumnNamesDropDown), new { dropdownId = "klasaDecyzyjnaDropdown", columnTypes = new List<ColumnType> { ColumnType.INT, ColumnType.STRING } })
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>

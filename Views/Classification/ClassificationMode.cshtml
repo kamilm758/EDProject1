@@ -1,0 +1,24 @@
+﻿@model EDProject1.Models.ClassificationModeVm
+
+<form asp-action="ClassificationMode" method="post">
+    <input asp-for="@Model.KlasaDecyzyjna" hidden />
+    @for (int i = 0; i < Model.RowValues.Count; i++)
+        {
+            <label asp-for="@Model.RowValues[Model.RowValues.Keys.ToList()[i]]">@Model.RowValues.Keys.ToList()[i]</label>
+            if (Model.ColumnTypes[Model.RowValues.Keys.ToList()[i]] == ColumnType.STRING)
+            {
+              
+                <input type="text" asp-for="@Model.RowValues[Model.RowValues.Keys.ToList()[i]]" />
+
+            }
+            else
+            {
+                <input type="number" asp-for="@Model.RowValues[Model.RowValues.Keys.ToList()[i]]" />
+            }
+
+
+
+        }
+
+    <button type="submit" class="btn btn-primary">Potwierdź</button>
+</form>

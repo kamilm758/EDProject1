@@ -33,7 +33,13 @@ namespace EDProject1.Controllers
 
             return View(dataTableVm);
         }
+        
+        public IActionResult AllStep()
+        {
+            _algorithmProcessor.Run();
 
+            return RedirectToAction("Index");
+        }
         public IActionResult NextStep()
         {
             _algorithmProcessor.RunOneStep();
@@ -46,7 +52,7 @@ namespace EDProject1.Controllers
             _algorithmProcessor.CreateBinaryVectors();
 
 
-            string vectors = string.Join('\n', AlgorithmProcessor.Vectors.Select(x =>string.Join(',', x.Select(y => y.ToString().Replace("True","1").Replace("False", "0")))).Distinct());
+            string vectors = string.Join('\n', AlgorithmProcessor.Vectors.Select(x =>string.Join(',', x.Select(y => y.ToString().Replace("True","1").Replace("False", "0")))));
 
             return File(Encoding.UTF8.GetBytes(vectors), "text/plain", "Vectors.txt");
         }

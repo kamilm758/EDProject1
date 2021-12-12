@@ -4,14 +4,9 @@ using EDProject1.Services;
 using EDProject1.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EDProject1
 {
@@ -30,6 +25,7 @@ namespace EDProject1
             services.AddControllersWithViews();
             services.AddSingleton<DataStructure>();
             services.AddTransient<IImportService, ImportService>();
+            services.AddTransient<IClassificationService, ClassificationService>();
             services.AddTransient<AlgorithmProcessor>();
             services.AddTransient<IDataAnalizerService, DataAnalizerService>();
         }

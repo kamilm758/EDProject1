@@ -90,7 +90,7 @@ namespace EDProject1.Algorithm
             }
             
 
-            _proste.Add(new Prosta(nextCut.Item3, miesjceCiecia, nextCut.Item1));
+            _proste.Add(new Prosta(nextCut.Item3, miesjceCiecia, nextCut.Item1, nextCut.Item4));
             
         }
 
@@ -160,16 +160,16 @@ namespace EDProject1.Algorithm
 
         }
 
-        private (string, int, bool) NextCut()
+        private (string, int, bool, string) NextCut()
         {
-            List<(string, int, bool)> prepareToCut = new();   
+            List<(string, int, bool, string)> prepareToCut = new();   
 
 
             foreach (var value in _rzutowanieNaProsta)
             {
                 var firstValue = _rzutowanieNaProsta[value.Key].Wymiar.First();
 
-                (string, int, bool) toAdd = ((value.Key, 0, true));
+                (string, int, bool, string) toAdd = ((value.Key, 0, true, firstValue.Item2));
                 foreach (var item in _rzutowanieNaProsta[value.Key].Wymiar)
                 {
                     List<(double, string)> podzbiorZTaSamoWartoscia = _rzutowanieNaProsta[value.Key].Wymiar.Where(x => x.Item1 == item.Item1).ToList();
@@ -180,8 +180,9 @@ namespace EDProject1.Algorithm
                 }
                 prepareToCut.Add(toAdd);
 
-                toAdd = ((value.Key, 0, false));
+             
                 var lastValue = _rzutowanieNaProsta[value.Key].Wymiar.Last();
+                toAdd = ((value.Key, 0, false, lastValue.Item2));
                 foreach (var item in _rzutowanieNaProsta[value.Key].Wymiar.AsEnumerable().Reverse())
                 {
                     List<(double, string)> podzbiorZTaSamoWartoscia = _rzutowanieNaProsta[value.Key].Wymiar.Where(x => x.Item1 == item.Item1).ToList();
