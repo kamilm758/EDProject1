@@ -47,6 +47,13 @@ namespace EDProject1.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult GetFile()
+        {
+
+            return File(Encoding.UTF8.GetBytes($"Ilosc usunietych punktów:{AlgorithmProcessor._usunietePunkty.Count}, ilość cięć: {AlgorithmProcessor._proste.Count}" ), "text/plain", "dane.txt");
+        }
+
+
         public IActionResult GetVectors()
         {
             _algorithmProcessor.CreateBinaryVectors();
